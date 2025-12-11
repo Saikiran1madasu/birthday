@@ -1,87 +1,61 @@
-// automatically play music and start animation
-const playSong = () => {
-    const song = document.querySelector('.song');
-    if (song) {
-        // Set volume and ensure not muted
-        song.volume = 0.10;
-        song.muted = false;
-        
-        // Load the audio first
-        song.load();
-        
-        // Wait for audio to be ready
-        const tryPlay = () => {
-            const playPromise = song.play();
-            
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        // Audio started playing successfully
-                        console.log('Song is playing');
-                        song.muted = false;
-                    })
-                    .catch((error) => {
-                        console.log('Autoplay blocked, trying muted approach:', error);
-                        // If autoplay fails, try with muted first (browsers allow muted autoplay)
-                        song.muted = true;
-                        const mutedPlay = song.play();
-                        if (mutedPlay !== undefined) {
-                            mutedPlay
-                                .then(() => {
-                                    // Once playing, unmute it
-                                    setTimeout(() => {
-                                        song.muted = false;
-                                        console.log('Song unmuted and playing');
-                                    }, 100);
-                                })
-                                .catch(() => {
-                                    // If still blocked, enable on first user interaction
-                                    console.log('Setting up user interaction handler');
-                                    const enableAudio = () => {
-                                        song.muted = false;
-                                        song.play().catch((err) => {
-                                            console.log('Play failed on interaction:', err);
-                                        });
-                                        document.removeEventListener('click', enableAudio);
-                                        document.removeEventListener('touchstart', enableAudio);
-                                    };
-                                    document.addEventListener('click', enableAudio);
-                                    document.addEventListener('touchstart', enableAudio);
-                                });
-                        }
-                    });
-            }
-        };
-        
-        // Try to play when audio is ready
-        if (song.readyState >= 2) {
-            // Audio is already loaded
-            tryPlay();
-        } else {
-            // Wait for audio to load
-            song.addEventListener('canplaythrough', tryPlay, { once: true });
-            song.addEventListener('loadeddata', tryPlay, { once: true });
-            // Fallback: try after a short delay
-            setTimeout(() => {
-                if (song.paused) {
-                    tryPlay();
-                }
-            }, 500);
+// Show modal popup to ask user if they want to play sound
+window.addEventListener('load', () => {
+    Swal.fire({
+        title: 'Do you want to play music in the background?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        width: window.innerWidth <= 500 ? '90%' : '500px',
+        padding: window.innerWidth <= 500 ? '1.2rem' : '2rem',
+        customClass: {
+            popup: 'swal2-responsive',
+            title: 'swal2-title-responsive',
+            content: 'swal2-content-responsive',
+            confirmButton: 'swal2-confirm-responsive',
+            cancelButton: 'swal2-cancel-responsive'
         }
-    }
-};
-
-// Try to play as soon as DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        playSong();
-        animationTimeline();
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User clicked Yes - play the song
+            const song = document.querySelector('.song');
+            if (song) {
+                song.volume = 0.10;
+                song.muted = false;
+                song.load();
+                
+                const playPromise = song.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            console.log('Song is playing');
+                        })
+                        .catch((error) => {
+                            console.log('Play failed:', error);
+                            // Try again with user interaction
+                            Swal.fire({
+                                title: 'Please tap to play music',
+                                icon: 'info',
+                                confirmButtonText: 'OK',
+                                width: window.innerWidth <= 500 ? '90%' : '400px',
+                                padding: window.innerWidth <= 500 ? '1.2rem' : '2rem'
+                            }).then(() => {
+                                song.play().catch(() => {});
+                            });
+                        });
+                }
+            }
+            animationTimeline();
+        } else {
+            // User clicked No - just start animation without music
+            animationTimeline();
+        }
     });
-} else {
-    // DOM is already ready
-    playSong();
-    animationTimeline();
-}
+});
 
 
 // animation timeline

@@ -743,3 +743,99 @@ body {
     margin-top: 5px;
   }
 }
+
+/* SweetAlert Responsive Styles */
+@media screen and (max-width: 768px) {
+  .swal2-popup {
+    width: 90% !important;
+    max-width: 400px !important;
+    padding: 1.5rem !important;
+    font-size: 1rem !important;
+  }
+
+  .swal2-title {
+    font-size: 1.3rem !important;
+    margin-bottom: 1rem !important;
+    padding: 0 1rem !important;
+  }
+
+  .swal2-content {
+    font-size: 0.95rem !important;
+    padding: 0 0.5rem !important;
+  }
+
+  .swal2-actions {
+    margin-top: 1.5rem !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel {
+    font-size: 0.9rem !important;
+    padding: 0.6rem 1.5rem !important;
+    margin: 0.25rem !important;
+    min-width: 100px !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .swal2-popup {
+    width: 95% !important;
+    max-width: 350px !important;
+    padding: 1.2rem !important;
+    margin: 1rem !important;
+  }
+
+  .swal2-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.8rem !important;
+    padding: 0 0.5rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .swal2-content {
+    font-size: 0.85rem !important;
+    padding: 0 0.3rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .swal2-actions {
+    margin-top: 1.2rem !important;
+    width: 100% !important;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 1.2rem !important;
+    margin: 0.2rem !important;
+    width: 45% !important;
+    min-width: 80px !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .swal2-popup {
+    width: 95% !important;
+    max-width: 300px !important;
+    padding: 1rem !important;
+    margin: 0.5rem !important;
+  }
+
+  .swal2-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .swal2-content {
+    font-size: 0.8rem !important;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel {
+    font-size: 0.8rem !important;
+    padding: 0.45rem 1rem !important;
+    width: 48% !important;
+  }
+}
